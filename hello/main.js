@@ -1,4 +1,4 @@
-console.log("Esta processando");
+//console.log("Esta processando");
 
 const electron = require("electron");
 const app = electron.app;
@@ -8,25 +8,26 @@ const url = require("url");
 
 let win;
 function createWindow(){
-    win = new BrowserWindow();
+    win = new BrowserWindow({width: 800, height: 600});
     win.loadURL(url.format({
         pathname : path.join(__dirname,"index.html"),
-        protocol : "file" ,
+        protocol : "file:" ,
         slashes: true
     }));
+    win.webContents.openDevTools();
     win.on("closed", ()=>{
         win = null;
     })
 }
 
-app.on('read',createWindow);
+app.on('ready',createWindow);
 app.on('window-all-closed',()=>{
     if (process.platform!=='darwin'){
-        app.quit()
+        app.quit();
     }
 });
 app.on('activate',() =>{
     if (win === null){
-        createWindow()
+        createWindow();
     }
 });
